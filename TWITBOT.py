@@ -1,3 +1,21 @@
+#!env python.exe
+# -*- coding: utf-8 -*-
+"""\
+A simple Twitter Automation Bot. (Python 3.7)
+=============================================================
+
+Requires Oauth2 -> "pip install oauth2"
+"""
+__title__ = 'Twitbot'
+__author__ = "DMC Creations."
+__credits__ = ["Diego C."]
+__email__ = "dcadogan@live.com.ar"
+__version__ = "0.5.2"
+__status__ = "RC1"
+__maintainer__ = "DMC"
+__license__ = "LGPL"
+__copyright__ = "Copyright 2018, "
+
 import oauth2 as oauth
 import json
 import urllib

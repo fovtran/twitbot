@@ -1,3 +1,19 @@
+#!env python.exe
+# -*- coding: utf-8 -*-
+"""\
+Json reader writer for the Twitter Oauth2 API (Twitbot).
+=============================================================
+"""
+__title__ = 'Twitbot'
+__author__ = "DMC Creations."
+__credits__ = ["Diego C."]
+__email__ = "dcadogan@live.com.ar"
+__version__ = "0.5.2"
+__status__ = "RC1"
+__maintainer__ = "DMC"
+__license__ = "LGPL"
+__copyright__ = "Copyright 2018, "
+
 import sys, os
 import json
 
