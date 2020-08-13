@@ -10,7 +10,14 @@ authorize_token_url= "https://api.twitter.com/oauth/authorize"
 request_token_url= "https://api.twitter.com/oauth/request_token"
 access_token_url= "https://api.twitter.com/oauth/access_token"
 
+twitter_api_statuses = "https://api.twitter.com/1.1/statuses"
+twitter_api_timeline = "https://api.twitter.com/1.1/statuses/user_timeline.json"
+twitter_api_update = "https://api.twitter.com/1.1/statuses/update.json"
+twitter_api_home = "https://api.twitter.com/1.1/statuses/home_timeline.json"
+twitter_api_search = "https://api.twitter.com/1.1/search/tweets.json"
+
 #data = urllib.parse.urlencode( {'user_id': 'lopitalch'} )
+
 def consumer():
 	consumer = oauth.Consumer(key=CONSUMER_KEY, secret=CONSUMER_SECRET)
 	token = oauth.Token(key=ACCESS_KEY, secret=ACCESS_SECRET)
@@ -18,11 +25,6 @@ def consumer():
 	resp, content = client.request(access_token_url, "POST")
 	return client
 
-twitter_api_statuses = "https://api.twitter.com/1.1/statuses"
-twitter_api_timeline = "https://api.twitter.com/1.1/statuses/user_timeline.json"
-twitter_api_update = "https://api.twitter.com/1.1/statuses/update.json"
-twitter_api_home = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-twitter_api_search = "https://api.twitter.com/1.1/search/tweets.json"
 
 def get_home(client):
 	resp, data = client.request(twitter_api_home, method="GET")
@@ -83,18 +85,26 @@ def post_tweet(client, msg):
 	data = urllib.parse.urlencode( {'status': msg} )
 	resp, data = client.request(twitter_api_update, body=(data, "utf-8"), method="POST")
 
-username = 'lopitalch'
+username = 'your-twitter-username'
 client = consumer()
 
-#get_query(client)
+# Launch a refined twitter search. Parse some stats
+# get_query(client)
+
+# Get your timeline tweets (your follows tweets)
 # get_home(client)
+
+# Post a Tweet
 # post_tweet(client, 'save me lord,')
 
-ids, tweets = get_timeline(client, username, 2)
+# Show your current tweets up to N. In reverse order
+N = 3
+ids, tweets = get_timeline(client, username, 3)
 tweets.reverse()
 for twit in tweets:
 	print(twit)
 
+# Ask to delete latest N tweets
 query = input('Delete current Tweets? [Y/N]: ')
 if query=='Y':
 	about_id_rm=True
