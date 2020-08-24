@@ -1,7 +1,7 @@
-#!env python.exe
 # -*- coding: utf-8 -*-
+
 """\
-A simple Twitter Automation Bot. (Python 3.7)
+Simple Twitter Automation Bot. (Python ~3.7)
 =============================================================
 
 Requires Oauth2 -> "pip install oauth2"
@@ -12,7 +12,7 @@ __credits__ = ["Diego C."]
 __email__ = "dcadogan@live.com.ar"
 __version__ = "0.5.2"
 __status__ = "RC1"
-__maintainer__ = "DMC"
+__maintainer__ = "Beta"
 __license__ = "LGPL"
 __copyright__ = "Copyright 2018, "
 
@@ -28,14 +28,6 @@ authorize_token_url= "https://api.twitter.com/oauth/authorize"
 request_token_url= "https://api.twitter.com/oauth/request_token"
 access_token_url= "https://api.twitter.com/oauth/access_token"
 
-twitter_api_statuses = "https://api.twitter.com/1.1/statuses"
-twitter_api_timeline = "https://api.twitter.com/1.1/statuses/user_timeline.json"
-twitter_api_update = "https://api.twitter.com/1.1/statuses/update.json"
-twitter_api_home = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-twitter_api_search = "https://api.twitter.com/1.1/search/tweets.json"
-
-#data = urllib.parse.urlencode( {'user_id': 'lopitalch'} )
-
 def consumer():
 	consumer = oauth.Consumer(key=CONSUMER_KEY, secret=CONSUMER_SECRET)
 	token = oauth.Token(key=ACCESS_KEY, secret=ACCESS_SECRET)
@@ -43,6 +35,11 @@ def consumer():
 	resp, content = client.request(access_token_url, "POST")
 	return client
 
+twitter_api_statuses = "https://api.twitter.com/1.1/statuses"
+twitter_api_timeline = "https://api.twitter.com/1.1/statuses/user_timeline.json"
+twitter_api_update = "https://api.twitter.com/1.1/statuses/update.json"
+twitter_api_home = "https://api.twitter.com/1.1/statuses/home_timeline.json"
+twitter_api_search = "https://api.twitter.com/1.1/search/tweets.json"
 
 def get_home(client):
 	resp, data = client.request(twitter_api_home, method="GET")
@@ -52,7 +49,7 @@ def get_home(client):
 		print('--------------------------------')
 
 def get_query(client):
-	query = "big%20data&count=100&result_type=recent" #popular!recent
+	query = "Big%20Insight&count=100&result_type=recent" #popular!recent
 	resp, data = client.request(twitter_api_search + "?q="+query, method="GET")
 	tweets = json.loads(data.decode('utf-8'))
 	hashlist = []
@@ -95,15 +92,14 @@ def get_timeline(client,username, count):
 
 def destroy_timeline(client,ID):
 	resp, data = client.request(twitter_api_statuses+"/destroy/"+str(ID)+".json", method="POST")
-	print(data)
-	return resp
+	return resp, data
 
 def post_tweet(client, msg):
 	# { 'display_coordinates': 'true', 'lat': '', 'long': '', 'media_ids': ''}
 	data = urllib.parse.urlencode( {'status': msg} )
 	resp, data = client.request(twitter_api_update, body=(data, "utf-8"), method="POST")
 
-username = 'your-twitter-username'
+username = 'nobody'
 client = consumer()
 
 # Launch a refined twitter search. Parse some stats
@@ -116,17 +112,20 @@ client = consumer()
 # post_tweet(client, 'save me lord,')
 
 # Show your current tweets up to N. In reverse order
-N = 3
-ids, tweets = get_timeline(client, username, 3)
+
+if len(sys.argv)>1:
+	twitcount=int(sys.argv[1])
+else:
+	twitcount=1
+ids, tweets = get_timeline(client, username, twitcount)
 tweets.reverse()
 for twit in tweets:
 	print(twit)
 
-# Ask to delete latest N tweets
 query = input('Delete current Tweets? [Y/N]: ')
 if query=='Y':
 	about_id_rm=True
 	for i in ids:
 		if about_id_rm:
 			print('Id:%i'%i)
-			ret = destroy_timeline(client,i)
+			resp, data = destroy_timeline(client,i)
